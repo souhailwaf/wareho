@@ -1,0 +1,162 @@
+@model ReceivingViewModel
+@{
+    ViewData["Title"] = "Receive Items";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">
+        <i class="bi bi-box-arrow-in-down me-2 text-success"></i>
+        Receive Items
+    </h2>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-success bg-opacity-10 border-bottom">
+                <h5 class="card-title mb-0 text-success">
+                    <i class="bi bi-box-arrow-in-down me-2"></i>
+                    Item Receipt
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Receive" method="post">
+                    <div class="row g-3">
+                        <!-- Item Information -->
+                        <div class="col-md-6">
+                            <label for="ItemSku" class="form-label">Item SKU <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-upc-scan"></i>
+                                </span>
+                                <input asp-for="ItemSku" class="form-control" placeholder="Scan or enter SKU" required autofocus/>
+                            </div>
+                            <span asp-validation-for="ItemSku" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="LocationCode" class="form-label">Receiving Location <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-geo-alt"></i>
+                                </span>
+                                <input asp-for="LocationCode" class="form-control" placeholder="Enter location code" required/>
+                            </div>
+                            <span asp-validation-for="LocationCode" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="Quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-123"></i>
+                                </span>
+                                <input asp-for="Quantity" class="form-control" type="number" step="0.01" min="0.01" required/>
+                            </div>
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+
+                        <!-- Optional Fields -->
+                        <div class="col-md-6">
+                            <label for="LotNumber" class="form-label">Lot Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-tag"></i>
+                                </span>
+                                <input asp-for="LotNumber" class="form-control" placeholder="Enter lot number (optional)"/>
+                            </div>
+                            <span asp-validation-for="LotNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="SerialNumber" class="form-label">Serial Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-qr-code"></i>
+                                </span>
+                                <input asp-for="SerialNumber" class="form-control" placeholder="Enter serial number (optional)"/>
+                            </div>
+                            <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="col-12 pt-3">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>
+                                    Clear
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Receive Item
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-light border-bottom">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-lightning me-2"></i>
+                    Quick Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <a asp-action="Putaway" class="btn btn-outline-info w-100">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            Go to Putaway
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-controller="Inventory" asp-action="Index" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-stack me-2"></i>
+                            View Inventory
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        function clearForm() {
+            $('form')[0].reset();
+            $('#ItemSku').focus();
+        }
+
+        $(document).ready(function() {
+            // Focus on SKU input after successful submission
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                setTimeout(function() {
+                    $('#ItemSku').focus();
+                }, 100);
+                </text>
+            }
+
+            // Enter key navigation
+            $('input').on('keypress', function(e) {
+                if (e.which === 13 && !$(this).is('input[type="submit"]')) {
+                    e.preventDefault();
+                    var inputs = $('input[type!="hidden"]:visible');
+                    var nextInput = inputs.eq(inputs.index(this) + 1);
+                    if (nextInput.length) {
+                        nextInput.focus();
+                    } else {
+                        $('button[type="submit"]').focus();
+                    }
+                }
+            });
+        });
+    </script>
+}

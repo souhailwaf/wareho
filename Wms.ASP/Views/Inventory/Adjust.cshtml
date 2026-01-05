@@ -1,0 +1,144 @@
+@model StockAdjustmentViewModel
+@{
+    ViewData["Title"] = "Stock Adjustment";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">
+        <i class="bi bi-pencil-square me-2 text-warning"></i>
+        Stock Adjustment
+    </h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Inventory
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-warning bg-opacity-10 border-bottom">
+                <h5 class="card-title mb-0 text-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Adjust Stock Quantity
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Adjust" method="post">
+                    <div class="row g-3">
+                        <!-- Item Information -->
+                        <div class="col-md-6">
+                            <label for="ItemSku" class="form-label">Item SKU</label>
+                            <input asp-for="ItemSku" class="form-control" readonly/>
+                            <span asp-validation-for="ItemSku" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="LocationCode" class="form-label">Location</label>
+                            <input asp-for="LocationCode" class="form-control" readonly/>
+                            <span asp-validation-for="LocationCode" class="text-danger"></span>
+                        </div>
+
+                        <!-- Current Quantity Display -->
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Current Quantity:</strong> @Model.CurrentQuantity.ToString("N2")
+                            </div>
+                        </div>
+
+                        <!-- New Quantity Input -->
+                        <div class="col-12">
+                            <label for="NewQuantity" class="form-label">New Quantity <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-123"></i>
+                                </span>
+                                <input asp-for="NewQuantity" class="form-control" type="number" step="0.01" min="0" required/>
+                            </div>
+                            <span asp-validation-for="NewQuantity" class="text-danger"></span>
+                            <div class="form-text">
+                                Enter the new quantity for this stock item.
+                            </div>
+                        </div>
+
+                        <!-- Adjustment Calculation -->
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-body py-2">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <small class="text-muted">Current</small>
+                                            <div class="fw-bold" id="currentQty">@Model.CurrentQuantity.ToString("N2")</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted">New</small>
+                                            <div class="fw-bold text-primary" id="newQty">@Model.NewQuantity.ToString("N2")</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted">Adjustment</small>
+                                            <div class="fw-bold" id="adjustment">@((Model.NewQuantity - Model.CurrentQuantity).ToString("+0.00;-0.00;0.00"))</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="col-12">
+                            <label for="Reason" class="form-label">Reason for Adjustment <span class="text-danger">*</span></label>
+                            <textarea asp-for="Reason" class="form-control" rows="3" placeholder="Enter reason for this stock adjustment..." required></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="col-12 pt-3">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Adjust Stock
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(document).ready(function() {
+            const currentQuantity = parseFloat(@Model.CurrentQuantity);
+            
+            function updateCalculation() {
+                const newQuantity = parseFloat($('#NewQuantity').val()) || 0;
+                const adjustment = newQuantity - currentQuantity;
+                
+                $('#newQty').text(newQuantity.toFixed(2));
+                $('#adjustment').text((adjustment >= 0 ? '+' : '') + adjustment.toFixed(2));
+                
+                // Update color based on adjustment type
+                const adjustmentElement = $('#adjustment');
+                adjustmentElement.removeClass('text-success text-danger text-secondary');
+                
+                if (adjustment > 0) {
+                    adjustmentElement.addClass('text-success');
+                } else if (adjustment < 0) {
+                    adjustmentElement.addClass('text-danger');
+                } else {
+                    adjustmentElement.addClass('text-secondary');
+                }
+            }
+            
+            $('#NewQuantity').on('input', updateCalculation);
+            updateCalculation(); // Initial calculation
+        });
+    </script>
+}

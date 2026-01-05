@@ -1,0 +1,172 @@
+@model EditItemViewModel
+@{
+    ViewData["Title"] = "Edit Item";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">
+        <i class="bi bi-pencil-square me-2 text-primary"></i>
+        Edit Item
+    </h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Items
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-primary bg-opacity-10 border-bottom">
+                <h5 class="card-title mb-0 text-primary">
+                    <i class="bi bi-box me-2"></i>
+                    Item Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input asp-for="Id" type="hidden"/>
+
+                    <div class="row g-3">
+                        <!-- Basic Information -->
+                        <div class="col-md-6">
+                            <label for="Sku" class="form-label">SKU</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-upc-scan"></i>
+                                </span>
+                                <input asp-for="Sku" class="form-control" readonly/>
+                            </div>
+                            <span asp-validation-for="Sku" class="text-danger"></span>
+                            <div class="form-text">SKU cannot be changed after creation</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="Name" class="form-label">Name <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-tag"></i>
+                                </span>
+                                <input asp-for="Name" class="form-control" placeholder="Enter item name" required/>
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter item description (optional)"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="UnitOfMeasure" class="form-label">Unit of Measure</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-rulers"></i>
+                                </span>
+                                <select asp-for="UnitOfMeasure" class="form-select">
+                                    <option value="EA">Each (EA)</option>
+                                    <option value="KG">Kilogram (KG)</option>
+                                    <option value="LB">Pound (LB)</option>
+                                    <option value="L">Liter (L)</option>
+                                    <option value="M">Meter (M)</option>
+                                    <option value="FT">Feet (FT)</option>
+                                    <option value="BOX">Box</option>
+                                    <option value="CASE">Case</option>
+                                    <option value="PALLET">Pallet</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="UnitOfMeasure" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="Barcode" class="form-label">Barcode</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-upc"></i>
+                                </span>
+                                <input asp-for="Barcode" class="form-control" placeholder="Enter barcode (optional)"/>
+                            </div>
+                            <span asp-validation-for="Barcode" class="text-danger"></span>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <h6 class="text-muted">Tracking Requirements</h6>
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                <strong>Note:</strong> Changing tracking requirements may affect existing stock records.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input asp-for="RequiresLot" class="form-check-input" type="checkbox"/>
+                                <label class="form-check-label" for="RequiresLot">
+                                    Requires Lot Tracking
+                                </label>
+                            </div>
+                            <div class="form-text">Enable if this item needs lot/batch tracking</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input asp-for="RequiresSerial" class="form-check-input" type="checkbox"/>
+                                <label class="form-check-label" for="RequiresSerial">
+                                    Requires Serial Tracking
+                                </label>
+                            </div>
+                            <div class="form-text">Enable if this item needs serial number tracking</div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="col-12 pt-3">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a asp-action="Index" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Update Item
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Additional Information Card -->
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-light border-bottom">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Additional Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <a asp-controller="Inventory" asp-action="Index" asp-route-searchTerm="@Model.Sku"
+                           class="btn btn-outline-info w-100">
+                            <i class="bi bi-stack me-2"></i>
+                            View Stock Levels
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-outline-secondary w-100" disabled>
+                            <i class="bi bi-graph-up me-2"></i>
+                            Movement History
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
