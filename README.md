@@ -7,14 +7,6 @@
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
-## ✨ Overview
-
-This Warehouse Management System provides comprehensive inventory management capabilities through two interfaces:
-- **🖥️ WinForms Desktop Application**: Professional, scanner-optimized interface for warehouse operations
-- **🌐 ASP.NET Core Web Application**: Modern, responsive web interface with Bootstrap 5 styling
-
-Built using Clean Architecture principles with Domain-Driven Design, the system ensures maintainability, testability, and scalability for enterprise-grade warehouse operations.
-
 
 
 ## 🏗️ Architecture
@@ -227,17 +219,6 @@ var item = await createItemUseCase.ExecuteAsync(new CreateItemDto
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
@@ -260,8 +241,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<p>Built with  using .NET 8, Clean Architecture, and modern design principles</p>
-<p><strong>⭐ Star this repo if you find it helpful!</strong></p>
+
 
 </div>#   w a r e h o 
  
