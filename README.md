@@ -246,15 +246,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - GitHub: (https://github.com/souhailwaf)
 - Email: Contact via GitHub
 
-## 🙏 Acknowledgments
 
-- **Microsoft** for the excellent .NET ecosystem and tooling
-- **Entity Framework Team** for the powerful ORM capabilities
-- **Bootstrap Team** for the amazing responsive CSS framework
-- **Serilog Community** for structured logging excellence
-- **Open Source Community** for inspiration and best practices
-
-## 🔗 Related Documentation
 
 - [UI Enhancement Guide](./Warehouse%20Management%20System/README-UI-ENHANCEMENTS.md)
 - [Responsive Design Implementation](./Warehouse%20Management%20System/RESPONSIVE-UI-DOCUMENTATION.md)
